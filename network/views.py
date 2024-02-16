@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-
+from django.contrib.auth.decorators import login_required
 from .models import User, Post
 
 
@@ -11,12 +11,16 @@ def index(request):
     return render(request, "network/index.html")
 
 
+
+@login_required
 def newPost (request):
-    if request.method == 'POST':  # If the form has been submitted...
-        content = request.POST['content']
+    if request.method == 'POST': 
+        print(request.FILES) # If the form has been submitted...
+        content = request.POST.get('content')
+        image = request.FILES.get('image') 
         user = User.objects.get(pk=request.user.id)
-        post = Post(content=content, user=user )
-        post.save
+        post = Post(content=content, user=user, image=image )
+        post.save()
         return HttpResponseRedirect(reverse(index))
 
 

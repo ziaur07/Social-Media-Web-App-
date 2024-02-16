@@ -5,9 +5,10 @@
     {% if user.is_authenticated %}
         <div class="newPost">
             <h5>New Post !</h5>
-            <form method="POST" action="{% url 'newPost' %}">
+            <form method="POST" action="{% url 'newPost' %}"  enctype="multipart/form-data">
                 {% csrf_token %}
                 <textarea name="content" rows="4" cols="70"></textarea>
+                <input type="file" name="image">
                 <br/>
                 <input type="submit" value="Post" class="btn btn -primary"/>
             </form>

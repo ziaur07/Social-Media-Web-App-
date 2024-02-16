@@ -8,6 +8,7 @@ class User(AbstractUser):
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name="author")
     content = models.TextField(max_length=150)
+    image = models.ImageField(upload_to='posts/', null=True, blank=True)
     post_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
