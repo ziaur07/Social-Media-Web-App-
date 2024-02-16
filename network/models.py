@@ -10,6 +10,7 @@ class Post(models.Model):
     content = models.TextField(max_length=150)
     image = models.ImageField(upload_to='posts/', null=True, blank=True)
     post_date = models.DateTimeField(auto_now_add=True)
+    likes = models.ImageField(default=0)
 
     def __str__(self):
         return f"Post {self.id} made by {self.user} on {self.post_date.strftime('%d %b %Y %H:%M:%S')}"

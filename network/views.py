@@ -22,6 +22,14 @@ def newPost (request):
         post = Post(content=content, user=user, image=image )
         post.save()
         return HttpResponseRedirect(reverse(index))
+    
+
+
+@login_required
+def allPosts(request):
+    posts = Post.objects.all().order_by('-post_date')
+    return render(request, 'all_posts.html', {'posts': posts})
+
 
 
 def login_view(request):

@@ -1,0 +1,16 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+{% for post in posts %}
+    <div>
+        <h2>{{ post.user.username }}</h2>
+        <p>{{ post.content }}</p>
+        <p>Posted on {{ post.post_date }}</p>
+        <p>Likes: {{ post.likes }}</p>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="Post image">
+        {% endif %}
+    </div>
+{% endfor %}
+{% endblock %}
