@@ -4,7 +4,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .models import User, Post
+from django.shortcuts import get_object_or_404, redirect
+from .models import User, Post, UserProfile
 
 
 def index(request):
@@ -24,11 +25,44 @@ def newPost (request):
         return HttpResponseRedirect(reverse(index))
     
 
+def all_users(request):
+    users = User.objects.all()
+    return render(request, 'all_users.html', {'users': users})
+    
+
 
 @login_required
 def allPosts(request):
     posts = Post.objects.all().order_by('-post_date')
     return render(request, 'all_posts.html', {'posts': posts})
+
+
+@login_required
+def profile(request, username):
+    user = User.objects.get(username=username)
+    
+    user_profile = UserProfile.objects.get(user=user)
+    posts = Post.objects.filter(user=user).order_by('-post_date')
+    return render(request, 'profile.html', {'user_profile': user_profile, 'posts': posts})
+
+
+@login_required
+def follow(request, username):
+    target = get_object_or_404(User, username=username)
+    if request.user == target:
+        # Users can't follow themselves
+        return redirect('profile', username=username)
+
+    user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+
+    if target in user_profile.following.all():
+        # If the current user is already following the target user, unfollow them
+        user_profile.following.remove(target)
+    else:
+        # If the current user is not following the target user, follow them
+        user_profile.following.add(target)
+
+    return redirect('profile', username=username)
 
 
 
@@ -74,6 +108,7 @@ def register(request):
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
+            UserProfile.objects.create(user=user)
         except IntegrityError:
             return render(request, "network/register.html", {
                 "message": "Username already taken."

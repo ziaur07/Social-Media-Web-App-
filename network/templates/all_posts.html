@@ -3,7 +3,7 @@
 {% block body %}
 
 {% for post in posts %}
-    <div>
+    <div class="allPosts">
         <h2>{{ post.user.username }}</h2>
         <p>{{ post.content }}</p>
         <p>Posted on {{ post.post_date }}</p>

@@ -1,0 +1,37 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+<h2>{{ user_profile.user.username }}</h2>
+<p>Followers: {{ user_profile.followers.count }}</p>
+<p>Following: {{ user_profile.following.count }}</p>
+
+
+{% if user.is_authenticated and user != user_profile.user %}
+    <form action="{% url 'follow' user_profile.user.username %}" method="post">
+        {% csrf_token %}
+        {% if user in user_profile.followers.all %}
+            <input type="submit" value="Unfollow">
+        {% else %}
+            <input type="submit" value="Follow">
+        {% endif %}
+    </form>
+{% endif %}
+
+
+{% for post in posts %}
+    <div>
+        <h3>{{ post.content }}</h3>
+        
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="Post image">
+        {% endif %}
+        
+        <p>Posted on {{ post.post_date }}</p>
+    </div>
+{% endfor %}
+
+
+
+{% endblock %}
+
