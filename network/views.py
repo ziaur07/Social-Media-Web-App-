@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -31,9 +32,19 @@ def all_users(request):
     
 
 
+#@login_required
+#def allPosts(request):
+    posts = Post.objects.all().order_by('-post_date')
+    return render(request, 'all_posts.html', {'posts': posts})
+
 @login_required
 def allPosts(request):
-    posts = Post.objects.all().order_by('-post_date')
+    posts_list = Post.objects.all().order_by('-post_date')
+    paginator = Paginator(posts_list, 10)  # Show 10 posts per page
+
+    page_number = request.GET.get('page')
+    posts = paginator.get_page(page_number)
+
     return render(request, 'all_posts.html', {'posts': posts})
 
 
@@ -67,11 +78,23 @@ def follow(request, username):
 
 
 
+#@login_required
+#def following_posts(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    following_users = user_profile.following.all()
+    posts = Post.objects.filter(user__in=following_users)
+    return render(request, 'following_posts.html', {'posts': posts}) 
 @login_required
 def following_posts(request):
     user_profile = UserProfile.objects.get(user=request.user)
     following_users = user_profile.following.all()
-    posts = Post.objects.filter(user__in=following_users)
+    posts_list = Post.objects.filter(user__in=following_users)
+    
+    paginator = Paginator(posts_list, 10)  # Show 10 posts per page
+
+    page_number = request.GET.get('page')
+    posts = paginator.get_page(page_number)
+
     return render(request, 'following_posts.html', {'posts': posts})
 
 

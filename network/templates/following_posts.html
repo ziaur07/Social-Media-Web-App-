@@ -9,15 +9,35 @@
         <p>{{ post.content }}</p>
         <a href="{% url 'profile' username=post.user.username %}"><p>{{ post.user.username }}</p></a>
         {% if post.image %}
-        <img src="{{ post.image.url }}" alt="Post image">
+        <img class="post_image"    src="{{ post.image.url }}" alt="Post image">
         {% endif %}
     {% empty %}
         <p>No posts to show.</p>
-
-       
     {% endfor %}
-  
-</div>
 
 </DIV>
+
+<nav>
+    <ul class="pagination">
+        {% if posts.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a></li>
+        {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+        {% endif %}
+
+        {% for i in posts.paginator.page_range %}
+            {% if posts.number == i %}
+                <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if posts.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Next</a></li>
+        {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+        {% endif %}
+    </ul>
+</nav>
 {% endblock %}

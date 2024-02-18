@@ -27,7 +27,7 @@
         <h3>{{ post.content }}</h3>
         
         {% if post.image %}
-            <img src="{{ post.image.url }}" alt="Post image">
+            <img class="post_image"     src="{{ post.image.url }}" alt="Post image">
         {% endif %}
         
         <p>Posted on {{ post.post_date }}</p>
