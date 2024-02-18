@@ -1,0 +1,23 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+<DIV class="following_centered">
+    {% for post in posts %}
+        <p>Posted on {{ post.post_date }}</p>
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+        <a href="{% url 'profile' username=post.user.username %}"><p>{{ post.user.username }}</p></a>
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="Post image">
+        {% endif %}
+    {% empty %}
+        <p>No posts to show.</p>
+
+       
+    {% endfor %}
+  
+</div>
+
+</DIV>
+{% endblock %}

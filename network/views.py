@@ -42,8 +42,9 @@ def profile(request, username):
     user = User.objects.get(username=username)
     
     user_profile = UserProfile.objects.get(user=user)
+    followers_count = UserProfile.objects.filter(following=user).count()
     posts = Post.objects.filter(user=user).order_by('-post_date')
-    return render(request, 'profile.html', {'user_profile': user_profile, 'posts': posts})
+    return render(request, 'profile.html', {'user_profile': user_profile, 'posts': posts, 'followers_count': followers_count})
 
 
 @login_required
@@ -64,6 +65,14 @@ def follow(request, username):
 
     return redirect('profile', username=username)
 
+
+
+@login_required
+def following_posts(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    following_users = user_profile.following.all()
+    posts = Post.objects.filter(user__in=following_users)
+    return render(request, 'following_posts.html', {'posts': posts})
 
 
 def login_view(request):
