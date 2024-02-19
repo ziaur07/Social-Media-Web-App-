@@ -1,4 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -97,6 +99,14 @@ def following_posts(request):
 
     return render(request, 'following_posts.html', {'posts': posts})
 
+@csrf_exempt
+@login_required
+def like_post(request):
+    if request.method == 'POST':
+        post_id = json.loads(request.body).get('post_id')
+        post = Post.objects.get(id=post_id)
+        like_count = post.toggle_like(request.user)
+        return JsonResponse({'like_count': like_count}, status=200)
 
 def login_view(request):
     if request.method == "POST":

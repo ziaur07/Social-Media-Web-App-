@@ -18,5 +18,13 @@ class Post(models.Model):
     post_date = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
 
+
     def __str__(self):
         return f"Post {self.id} made by {self.user} on {self.post_date.strftime('%d %b %Y %H:%M:%S')}"
+    
+    def toggle_like(self, user):
+        if user in self.likes.all():
+            self.likes.remove(user)
+        else:
+            self.likes.add(user)
+        return self.likes.count()
