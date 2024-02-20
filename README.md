@@ -7,7 +7,7 @@ makeing a twitter clone with key features of :
 6. pagination
 7. edit post
 
-   to run this download the zip and run
+   to run this install Djnago and download the zip and run
 8. py manage.py makemigrations
 9. py manage.py migrate
 10. py manage.py runserver
