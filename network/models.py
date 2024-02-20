@@ -16,7 +16,7 @@ class Post(models.Model):
     content = models.TextField(max_length=150)
     image = models.ImageField(upload_to='posts/', null=True, blank=True)
     post_date = models.DateTimeField(auto_now_add=True)
-    likes = models.IntegerField(default=0)
+    likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
 
 
     def __str__(self):

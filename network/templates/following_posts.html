@@ -1,7 +1,9 @@
 {% extends "network/layout.html" %}
 
-{% block body %}
-<script src="animation.js"></script>
+{% block body %} 
+
+{% load static %}
+<script src="{% static 'animation.js' %}"></script>
 
 <DIV class="following_centered">
     {% for post in posts %}
@@ -11,7 +13,7 @@
         <a href="{% url 'profile' username=post.user.username %}"><p>{{ post.user.username }}</p></a>
         {% if post.image %}
         <img class="post_image"    src="{{ post.image.url }}" alt="Post image">
-        ,<button classs="like-button" data-post-id="{{ post.id}}">
+        ,<button class="like-button" data-post-id="{{ post.id}}">
             Like
         </button>
         <span class="like-count">{{  post.likes.count }}</span>
