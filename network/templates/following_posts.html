@@ -13,12 +13,13 @@
         <a href="{% url 'profile' username=post.user.username %}"><p>{{ post.user.username }}</p></a>
         {% if post.image %}
         <img class="post_image"    src="{{ post.image.url }}" alt="Post image">
+
+        <br/>
+        {% endif %}
         ,<button class="like-button" data-post-id="{{ post.id}}">
             Like
         </button>
         <span class="like-count">{{  post.likes.count }}</span>
-        <br/>
-        {% endif %}
     {% empty %}
         <p>No posts to show.</p>
     {% endfor %}

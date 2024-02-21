@@ -1,8 +1,10 @@
 {% extends "network/layout.html" %}
 
-{% load static %} 
 
 {% block body %}
+
+{% load static %} 
+<script src="{% static 'animation.js' %}"></script>
 
 <h2>{{ user_profile.user.username }}</h2>
 
@@ -23,15 +25,21 @@
 
 
 {% for post in posts %}
-    <div class="profilePosts">
-        <h3>{{ post.content }}</h3>
-        
-        {% if post.image %}
-            <img class="post_image"     src="{{ post.image.url }}" alt="Post image">
-        {% endif %}
-        
+
+    <div class="post" data-post-id="{{ post.id }}">
+        <p class="post-content">{{ post.content }}</p>
+        <textarea class="edit-content" style="display: none;">{{ post.content }}</textarea>
         <p>Posted on {{ post.post_date }}</p>
-    </div>
+        {% if post.image %}
+            <img class="post_image" src="{{ post.image.url }}" alt="Post image">
+        {% endif %}
+        {% if user.is_authenticated and user == post.user %}
+            <button class="edit-button">Edit</button>
+            <button class="save-button" style="display: none;">Save</button>
+        {% endif %}
+</div>
+
+
 {% endfor %}
 
 
@@ -39,6 +47,5 @@
 {% endblock %}
 
 
-{% block extra_js %}
-<script src="{% static 'animation.js' %}"></script>
-{% endblock %}
+
+

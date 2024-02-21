@@ -2,6 +2,9 @@
 
 {% block body %}
 
+{% load static %}
+<script src="{% static 'animation.js' %}"></script>
+
 {% for post in posts %}
     <div class="allPosts">
         <a href="{% url 'profile' username=post.user.username %}"> <h6>{{ post.user.username }}</h6> </a>
@@ -10,6 +13,13 @@
         <p>Likes: {{ post.likes }}</p>
         {% if post.image %}
             <img class="post_image" src="{{ post.image.url }}" alt="Post image">
+        {% endif %}
+        ,<button class="like-button" data-post-id="{{ post.id}}">
+            Like
+        </button>
+        <span class="like-count">{{  post.likes.count }}</span>
+        {% if user.is_authenticated and user == post.user %}
+        <button class="edit-button" data-post-id="{{ post.id }}">Edit</button>
         {% endif %}
     </div>
 {% endfor %}

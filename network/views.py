@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from .models import User, Post, UserProfile
 
+import json
+
 
 def index(request):
     return render(request, "network/index.html")
@@ -98,6 +100,21 @@ def following_posts(request):
     posts = paginator.get_page(page_number)
 
     return render(request, 'following_posts.html', {'posts': posts})
+
+
+@csrf_exempt
+@login_required
+def edit_post(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        post_id = data.get('post_id')
+        new_content = data.get('content')
+        post = Post.objects.get(id=post_id)
+        if request.user != post.user:
+            return JsonResponse({"error": "You are not authorized to edit this post."}, status=403)
+        post.content = new_content
+        post.save()
+        return JsonResponse({"message": "Post updated successfully."}, status=201)
 
 @csrf_exempt
 @login_required
